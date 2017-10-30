@@ -1,3 +1,4 @@
+import org.neo4j.driver.v1.AuthTokens
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.datasource.DriverManagerDataSource
 
@@ -6,9 +7,16 @@ import scala.collection.JavaConversions._
 
 object Importer extends App {
 
-  val mysqlTemplate = new JdbcTemplate(new DriverManagerDataSource("jdbc:mysql://localhost:3306/beer?user=root&password=&useTimezone=true&serverTimezone=Europe/Berlin"))
-  val neo4jTemplate = new JdbcTemplate(new DriverManagerDataSource("jdbc:neo4j:bolt://localhost:7687", "neo4j", "neo4j123"))
+  // Wait until all the other stuff is started (only needed for this docker-compose example)
+  Thread.sleep(15000)
 
+  val mysqlDriver = new DriverManagerDataSource(sys.env("SQL_URL"))
+  mysqlDriver.setDriverClassName("com.mysql.cj.jdbc.Driver")
+  val mysqlTemplate = new JdbcTemplate(mysqlDriver)
+
+  val neo4jDriver = new DriverManagerDataSource(sys.env("NEO4J_URL"), sys.env("NEO4J_USER"), sys.env("NEO4J_PASSWORD"))
+  neo4jDriver.setDriverClassName("org.neo4j.jdbc.bolt.BoltDriver")
+  val neo4jTemplate = new JdbcTemplate(neo4jDriver)
 
   val beers = mysqlTemplate.queryForList("SELECT id, brewery_id, cat_id, style_id, name FROM `beers`").toList
   neo4jTemplate.execute("CREATE " +
