@@ -3,9 +3,18 @@ Hey, this is my interpretation of the neo4j beer demo. I got some inspiration fr
 
 ## The domain
 In this demo we are talking all about beer. There is this old website [openbeerdb.com](https://openbeerdb.com) and they offer a quite old list of beer, breweries, beer categories and beer styles as downloadable sql files. But age doesn't matter for this demo, as long as you are old enough to drink.
-You can find this sql files and the related readme in the `database/sql` folder. This database contains a list of around 1500 breweries and 6000 different beers with their relation to category and style. You can see the model and important properties in the diagram below:
+You can find this sql files and the related readme in the `sql` folder. This database contains a list of around 1500 breweries and 6000 different beers with their relation to category and style. You can see the model and important properties in the diagram below:
 
 ![Model](images/or.png)
+
+## Start the demo
+If you are using docker, you can start this demo by running
+
+```
+docker-compuse up
+```
+
+and pointing your favorite browser to `http://$dockerhost:7474`.
 
 ## Extract rich data to Neo4j
 ### Install Neo4j
