@@ -1,0 +1,22 @@
+version: '2'
+services:
+  mysql:
+    image: unterstein/dcos-beer-database:latest
+
+  neo4j:
+    image: neo4j:3.2.0
+    ports:
+      - "7474:7474"
+
+  migration:
+    image: unterstein/neo4j-beer-demo:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - neo4j
+    environment:
+      - SQL_URL=jdbc:mysql://database:3306/beer?user=good&password=beer
+      - NEO4J_URL=bolt+routing://neo4j:dcos@neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=dcos
